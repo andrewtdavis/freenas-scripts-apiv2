@@ -27,7 +27,7 @@ parentdataset = "parentdataset"
 # Quota to apply to the dataset, using the same format as the FreeNAS UI). Set to "0" to disable quota
 quota = "0"
 
-# NFS share subnet in CDIR notation. Multiple can be in one share separated with spaces. Single hosts are /32. To
+# NFS share subnet in CIDR notation. Multiple can be in one share separated with spaces. Single hosts are /32. To
 # enable map_root, enter username to map root to, typically "root". Setting "none" will enable root_squash,
 # the default behavior on FreeNAS NFS mounts.
 nfsnetwork = ["127.0.0.1/32"]
@@ -92,7 +92,7 @@ if parentdataset == "parentdataset":
 if nfsnetwork == "127.0.0.1/32" or nfscomment == "Server A share":
     print(BColors.WARNING + "WARNING: Default NFS share found!" + BColors.ENDC)
     del nfsnetwork
-    nfsnetwork = [input("Please enter NFS client(s) in CDIR notation: ")]
+    nfsnetwork = [input("Please enter NFS client(s) in CIDR notation: ")]
     nfsmaproot = [input("Please enter 'Maproot User' username or 'none': ")]
     nfscomment = [input("Please enter NFS share description: ")]
 
@@ -103,7 +103,7 @@ if len(nfsnetwork) == 1:
         try:
             ipaddr = ipaddress.ip_network(block)
         except ValueError:
-            print(BColors.FAIL + "ERROR: \"" + block + "\" is not a valid CDIR block." + BColors.ENDC)
+            print(BColors.FAIL + "ERROR: \"" + block + "\" is not a valid CIDR block." + BColors.ENDC)
             exit(1)
 
 # For more than one share:
@@ -114,7 +114,7 @@ if len(nfsnetwork) > 1:
             try:
                 ipaddr = ipaddress.ip_network(block)
             except ValueError:
-                print(BColors.FAIL + "ERROR: \"" + block + "\" is not a valid CDIR block." + BColors.ENDC)
+                print(BColors.FAIL + "ERROR: \"" + block + "\" is not a valid CIDR block." + BColors.ENDC)
                 exit(1)
         i += 1
 
