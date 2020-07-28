@@ -158,7 +158,7 @@ print(
     BColors.ENDC)
 password = getpass.getpass("Enter password for " + login + "@" + freenasserver + ": ")
 
-#Validate Credentials
+# Validate Credentials
 checkcredentials = requests.get(
     serverschemelower + "://" + freenasserver + "/api/v2.0/system/info",
     auth=(login, password)
