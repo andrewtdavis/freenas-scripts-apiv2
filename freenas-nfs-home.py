@@ -158,6 +158,16 @@ print(
     BColors.ENDC)
 password = getpass.getpass("Enter password for " + login + "@" + freenasserver + ": ")
 
+#Validate Credentials
+checkcredentials = requests.get(
+    serverschemelower + "://" + freenasserver + "/api/v2.0/system/info",
+    auth=(login, password)
+)
+if checkcredentials.status_code == 401:
+    print(BColors.FAIL + "ERROR: Login failed. Please try again." + BColors.ENDC)
+    exit(1)
+
+
 if mode == "create":
     # Prepare dataset IDs for HTTP calls. / needs to be converted to %2F
     parentdatasetid = pool + "%2F" + parentdataset.replace("/", "%2F")
@@ -229,17 +239,17 @@ if mode == "create":
                 print(BColors.FAIL + "ERROR: NFS Share " + str(
                     share["networks"]) + " for " + newdatasetnfssharepath + "EXISTS. Aborting." + BColors.ENDC)
                 exit(1)
-            else:
-                if len(nfsnetwork) > 1:
-                    print(BColors.OKGREEN + "VALIDATION: All NFS shares for " + newdatasetnfssharepath + "do not "
-                                                                                                         "exist yet, "
-                                                                                                         "proceeding." +
-                          BColors.ENDC)
-                else:
-                    print(BColors.OKGREEN + "VALIDATION: NFS share for " + newdatasetnfssharepath + "does not exist "
-                                                                                                    "yet, "
-                                                                                                    "proceeding." +
-                          BColors.ENDC)
+
+    if len(nfsnetwork) > 1:
+        print(BColors.OKGREEN + "VALIDATION: All NFS shares for " + newdatasetnfssharepath + " do not "
+                                                                                             "exist yet, "
+                                                                                             "proceeding." +
+              BColors.ENDC)
+    else:
+        print(BColors.OKGREEN + "VALIDATION: NFS share for " + newdatasetnfssharepath + " does not exist "
+                                                                                        "yet, "
+                                                                                        "proceeding." +
+              BColors.ENDC)
 
     print("")
 
